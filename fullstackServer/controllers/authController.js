@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { error, success } = require("../utils/responseWrapper");
 
+// API TO SIGNUP
 const signupController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -18,7 +19,7 @@ const signupController = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    await User.create({
       name,
       email,
       password: hashedPassword,
@@ -30,6 +31,7 @@ const signupController = async (req, res) => {
   }
 };
 
+// API TO LOGIN
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -65,7 +67,36 @@ const loginController = async (req, res) => {
 
     return res.send(success(201, { accessToken }));
   } catch (e) {
-    console.log("error from login", e);
+    return res.send(error(401, e));
+  }
+};
+
+// API TO CHANGE PASSWORD
+const changePasswordController = async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.send(error(404, "User is not registered."));
+    }
+
+    const matched = await bcrypt.compare(currentPassword, user.password);
+
+    if (!matched) {
+      return res.send(error(403, "Incorrect password."));
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const userPassword = await User.updateOne(
+      { email },
+      { $set: { password: hashedPassword } }
+    );
+
+    res.send(success(200, userPassword));
+  } catch (e) {
     return res.send(error(401, e));
   }
 };
@@ -83,7 +114,7 @@ const refreshAccessTokenController = async (req, res) => {
   try {
     const decoded = jwt.verify(
       refreshToken,
-      "process.env.REFRESH_TOKEN_PRIVATE_KEY"
+      "lasdknfo3i4u5potifnasdlkfjoir453r"
     );
 
     const _id = decoded._id;
@@ -95,22 +126,10 @@ const refreshAccessTokenController = async (req, res) => {
   }
 };
 
-const logoutController = async (req, res) => {
-  try {
-    res.clearCookie("jwt", {
-      httpOnly: true,
-      secure: true,
-    });
-    return res.send(success(200, "User Logged Out."));
-  } catch (e) {
-    res.send(error(500, e.message));
-  }
-};
-
 // internal functions
 const generateAccessToken = (data) => {
   try {
-    const token = jwt.sign(data, "process.env.ACCESS_TOKEN_PRIVATE_KEY", {
+    const token = jwt.sign(data, "eiughjbkjvxosaiu7r9et58yh", {
       expiresIn: "1d",
     });
     console.log(token);
@@ -122,7 +141,7 @@ const generateAccessToken = (data) => {
 
 const generateRefreshToken = (data) => {
   try {
-    const token = jwt.sign(data, "process.env.REFRESH_TOKEN_PRIVATE_KEY", {
+    const token = jwt.sign(data, "juietr7jfkutrwe9ruifjnf9r", {
       expiresIn: "1y",
     });
     console.log(token);
@@ -136,7 +155,7 @@ module.exports = {
   signupController,
   loginController,
   refreshAccessTokenController,
-  logoutController,
+  changePasswordController,
 };
 
-// JWT.IO website name
+

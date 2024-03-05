@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
   try {
     const decoded = jwt.verify(
       accessToken,
-      "process.env.ACCESS_TOKEN_PRIVATE_KEY"
+      "eiughjbkjvxosaiu7r9et58yh"
     );
     req._id = decoded._id;
 
@@ -27,7 +27,6 @@ module.exports = async (req, res, next) => {
 
     next();
   } catch (e) {
-    console.log('error aaya hai: ',e);
     return res.send(error(401, "Invalid access key."));
   }
 };

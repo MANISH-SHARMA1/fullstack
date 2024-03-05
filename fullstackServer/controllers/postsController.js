@@ -3,6 +3,7 @@ const minifaker = require("minifaker");
 const { success, error } = require("../utils/responseWrapper");
 require("minifaker/locales/en");
 
+// API TO GET POST
 const getPosts = async (req, res) => {
   const skip = req.query.skip ? Number(req.query.skip) : 0;
   const DEFAULT_LIMIT = 10;
@@ -16,6 +17,7 @@ const getPosts = async (req, res) => {
   }
 };
 
+// API TO CREATE POST
 const createPosts = async (req, res) => {
   const { total } = req.body;
   const posts = [];
@@ -27,6 +29,7 @@ const createPosts = async (req, res) => {
         const randomAvatarNum = Math.floor(Math.random() * 70) + 1;
         const randomImageNum = Math.floor(Math.random() * 70) + 1;
 
+        // minifaker is user to create fake name and caption
         const post = new Post({
           username: minifaker.username(),
           avatar: `https://i.pravatar.cc/150?img=${randomAvatarNum}`,

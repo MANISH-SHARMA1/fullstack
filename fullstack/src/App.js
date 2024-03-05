@@ -5,6 +5,7 @@ import Login from "./pages/login/Login";
 import RequireUser from "./components/RequireUser";
 import OnlyIfNotLoggedIn from "./components/OnlyIfNotLoggedIn";
 import { Toaster } from "react-hot-toast";
+import ChangePassword from "./pages/changePassword/ChangePassword";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<OnlyIfNotLoggedIn />}>
           <Route path="/" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="changePassword" element={<ChangePassword />} />
         </Route>
       </Routes>
     </>
