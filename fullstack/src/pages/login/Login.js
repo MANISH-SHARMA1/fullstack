@@ -23,7 +23,6 @@ function Login() {
 
   const onLogin = async (data) => {
     try {
-      console.log(data);
       const response = await axiosClient.post("/auth/login", {
         email: data.email,
         password: data.password,

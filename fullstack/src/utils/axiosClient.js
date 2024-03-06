@@ -5,6 +5,7 @@ import {
   removeItem,
   setItem,
 } from "./localStorageManager";
+import toast from "react-hot-toast";
 
 let baseURL = "http://localhost:4000/";
 
@@ -31,14 +32,7 @@ axiosClient.interceptors.response.use(
     const originalRequest = response.config;
     const statusCode = data.statusCode;
     const error = data.message;
-    console.log(
-      "originaRequest: ",
-      originalRequest,
-      "statusCode: ",
-      statusCode,
-      "error: ",
-      error
-    );
+    toast.error(error)
 
     //means the access token expired
     if (statusCode === 401 && !originalRequest._retry) {

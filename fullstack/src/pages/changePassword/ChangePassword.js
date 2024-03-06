@@ -26,13 +26,12 @@ function ChangePassword() {
 
   const onChangePassword = async (data) => {
     try {
-      await axiosClient.post("/auth/changePassword", {
+      const response = await axiosClient.post("/auth/changePassword", {
         email: data.email,
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       });
-
-      toast.success("Password changed successfully");
+      toast.success(response.result);
     } catch (e) {
       toast.error(e);
     }

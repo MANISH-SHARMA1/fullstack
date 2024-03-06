@@ -30,13 +30,12 @@ function Signup() {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
-      await axiosClient.post("/auth/signup", {
+     const response =  await axiosClient.post("/auth/signup", {
         name: data.name,
         email: data.email,
         password: data.confirmPassword,
       });
-      toast.success("Sign Up successfully");
+      toast.success(response.result);
       navigate("/login");
     } catch (e) {
       toast.error(e);

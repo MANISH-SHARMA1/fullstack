@@ -25,7 +25,7 @@ const signupController = async (req, res) => {
       password: hashedPassword,
     });
 
-    return res.send(success(201, "User created successfull."));
+    return res.send(success(201, "User created successfully."));
   } catch (e) {
     return res.send(error(500, e.message));
   }
@@ -90,12 +90,9 @@ const changePasswordController = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    const userPassword = await User.updateOne(
-      { email },
-      { $set: { password: hashedPassword } }
-    );
+    await User.updateOne({ email }, { $set: { password: hashedPassword } });
 
-    res.send(success(200, userPassword));
+    res.send(success(200, "Password changed successfully"));
   } catch (e) {
     return res.send(error(401, e));
   }
@@ -132,7 +129,6 @@ const generateAccessToken = (data) => {
     const token = jwt.sign(data, "eiughjbkjvxosaiu7r9et58yh", {
       expiresIn: "1d",
     });
-    console.log(token);
     return token;
   } catch (error) {
     console.log("Errorr: ", error);
@@ -144,7 +140,6 @@ const generateRefreshToken = (data) => {
     const token = jwt.sign(data, "juietr7jfkutrwe9ruifjnf9r", {
       expiresIn: "1y",
     });
-    console.log(token);
     return token;
   } catch (error) {
     console.log("Errorr: ", error);
@@ -157,5 +152,3 @@ module.exports = {
   refreshAccessTokenController,
   changePasswordController,
 };
-
-
